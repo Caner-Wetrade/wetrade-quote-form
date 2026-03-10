@@ -1,1 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wetrade — Request a Quotation</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0F1A2E;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
 
+  .card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+    animation: slideUp 0.4s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* Header */
+  .card-header {
+    padding: 32px 36px 24px;
+    text-align: center;
+    border-bottom: 1px solid #F0F0F0;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #00B894;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+  }
+  .card-header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1A1A2E;
+    margin-top: 8px;
+  }
+  .card-header p {
+    font-size: 13px;
+    color: #999;
+    margin-top: 6px;
+  }
+
+  /* Form */
+  .card-body { padding: 28px 36px 20px; }
+
+  .form-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .form-group {
+    flex: 1;
+  }
+  .form-group.full { flex: 1 0 100%; }
+
+  label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #555;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: #F5F6F8;
+    border: 1.5px solid #EEEEEE;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #2D3436;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: #00B894;
+    box-shadow: 0 0 0 3px rgba(0,184,148,0.12);
+    background: #FFF;
+  }
+  input::placeholder, textarea::placeholder { color: #BBB; }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: #F0F0F0;
+    margin: 8px 0 20px;
+  }
+
+  /* Price hint */
+  .price-hint {
+    background: linear-gradient(135deg, #F0FFF9, #E8F8F0);
+    border: 1px solid #D0F0E0;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .price-hint .left {
+    font-size: 11px;
+    font-weight: 700;
+    color: #00B894;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .price-hint .left span {
+    display: block;
+    font-size: 12px;
+    color: #888;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-top: 2px;
+  }
+  .price-hint .right {
+    text-align: right;
+    font-size: 11px;
+    color: #999;
+    line-height: 1.5;
+  }
+
+  /* Submit button */
+  .btn-submit {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #00B894, #00A07D);
+    color: #FFF;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+  }
+  .btn-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0,184,148,0.35);
+  }
+  .btn-submit:active { transform: translateY(0); }
+
+  /* Footer */
+  .card-footer {
+    padding: 16px 36px 28px;
+    text-align: center;
+  }
+  .card-footer p {
+    font-size: 11px;
+    color: #BBB;
+  }
+
+  /* Logo area */
+  .logo-bar {
+    padding: 20px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #F0F0F0;
+  }
+  .logo {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .logo .we { color: #00B894; }
+  .logo .trade { color: #2D3436; }
+  .logo .ai-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #00B894, #6C5CE7);
+    color: #FFF;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+  .logo-bar .contact {
+    font-size: 11px;
+    color: #AAA;
+  }
+  .logo-bar .contact a {
+    color: #00B894;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* Success state */
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 60px 36px;
+  }
+  .success-msg .check {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #00B894, #00A07D);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #FFF;
+    margin-bottom: 16px;
+  }
+  .success-msg h2 { font-size: 20px; color: #1A1A2E; margin-bottom: 8px; }
+  .success-msg p { font-size: 13px; color: #888; line-height: 1.6; }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .form-row { flex-direction: column; gap: 12px; }
+    .card-header, .card-body, .card-footer, .logo-bar { padding-left: 24px; padding-right: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <!-- Header -->
+  <div class="card-header">
+    <div class="badge">New Inquiry</div>
+    <h1>Request a Quotation</h1>
+    <p>Fill in below &middot; We'll send your quotation within 24 hours</p>
+  </div>
+
+  <!-- Form -->
+  <form id="quoteForm" class="card-body" onsubmit="return submitForm()">
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="company">Company Name</label>
+        <input type="text" id="company" name="company" placeholder="e.g. ABC Glass Inc." required>
+      </div>
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. John Smith" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="product">Product Group</label>
+        <select id="product" name="product" required>
+          <option value="" disabled selected>Select product...</option>
+          <option>Tempered Glass</option>
+          <option>Laminated Glass</option>
+          <option>Insulated Glass (IGU)</option>
+          <option>Coated Glass</option>
+          <option>Float Glass</option>
+          <option>Mirror</option>
+          <option>Patterned Glass</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="quantity">Quantity (Containers)</label>
+        <input type="text" id="quantity" name="quantity" placeholder="e.g. 3 containers" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="destination">Destination Port</label>
+        <input type="text" id="destination" name="destination" placeholder="e.g. Miami, FL" required>
+      </div>
+      <div class="form-group">
+        <label for="origin">Preferred Origin</label>
+        <select id="origin" name="origin">
+          <option value="" disabled selected>Any / select...</option>
+          <option>Turkey</option>
+          <option>China</option>
+          <option>Malaysia</option>
+          <option>Indonesia</option>
+          <option>Balkans</option>
+          <option>No preference</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group full">
+        <label for="specs">Specs &amp; Notes <span style="font-weight:400;color:#AAA;">(optional)</span></label>
+        <textarea id="specs" name="specs" placeholder="Thickness, size, coating type, drawing reference..."></textarea>
+      </div>
+    </div>
+
+    <!-- Price hint -->
+    <div class="price-hint">
+      <div class="left">
+        Indicative Price Range
+        <span>CIF basis &middot; indicative</span>
+      </div>
+      <div class="right">
+        Indicative price &middot; Valid 48h<br>
+        Final price on proforma
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn-submit">SEND QUOTATION REQUEST</button>
+  </form>
+
+  <!-- Footer -->
+  <div class="card-footer">
+    <p>Your inquiry goes directly to your account manager &middot; No commitment</p>
+  </div>
+
+  <!-- Success message (shown after submit) -->
+  <div class="success-msg" id="successMsg">
+    <div class="check">&#10003;</div>
+    <h2>Request Sent!</h2>
+    <p>Your quotation request has been received.<br>We'll get back to you <strong>within 24 hours</strong>.</p>
+  </div>
+
+  <!-- Error message -->
+  <div class="success-msg" id="errorMsg" style="display:none;">
+    <div class="check" style="background:#e74c3c;">!</div>
+    <h2>Something went wrong</h2>
+    <p>Please email us directly at <a href="mailto:cemil@we-trade.com.tr" style="color:#00B894;">cemil@we-trade.com.tr</a></p>
+  </div>
+
+  <!-- Logo bar -->
+  <div class="logo-bar">
+    <div class="logo">
+      <span class="we">we</span><span class="trade">trade</span>
+      <span class="ai-badge">AI</span>
+    </div>
+    <div class="contact">
+      <a href="https://wetrade.com.tr">wetrade.com.tr</a> &middot; Istanbul &middot; Dubai
+    </div>
+  </div>
+</div>
+
+<script>
+function submitForm() {
+  var btn = document.querySelector('.btn-submit');
+  btn.textContent = 'SENDING...';
+  btn.disabled = true;
+
+  var data = {
+    company: document.getElementById('company').value.trim(),
+    name: document.getElementById('name').value.trim(),
+    product: document.getElementById('product').value,
+    quantity: document.getElementById('quantity').value.trim(),
+    destination: document.getElementById('destination').value.trim(),
+    origin: document.getElementById('origin').value || 'No preference',
+    specs: document.getElementById('specs').value.trim(),
+    _subject: 'Glass Quote Request — ' + document.getElementById('company').value.trim()
+  };
+
+  fetch('https://formspree.io/f/xgonaywv', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(function(response) {
+    if (response.ok) {
+      document.getElementById('quoteForm').style.display = 'none';
+      document.querySelector('.card-footer').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    } else {
+      throw new Error('Form submission failed');
+    }
+  })
+  .catch(function() {
+    document.getElementById('quoteForm').style.display = 'none';
+    document.querySelector('.card-footer').style.display = 'none';
+    document.getElementById('errorMsg').style.display = 'block';
+  });
+
+  return false;
+}
+</script>
+
+</body>
+</html>
